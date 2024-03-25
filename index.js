@@ -18,13 +18,29 @@ function passwordCheck(req, res, next) {
   next();
 }
 
+app.use(passwordCheck);
+
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
 
 app.post("/check", (req, res) => {
   if (passwordValid) {
-    res.sendFile(__dirname + "/public/secret.html");
+    //res.sendFile(__dirname + "/public/secret.html");
+    const today = new Date();
+    const day = today.getDay();
+
+    let type = "a weekday";
+    let msg = "carry on with your work lad!";
+
+    if (day === 0 || day === 6) {
+      type = "a weekend";
+      msg = "lets get plastered.";
+    }
+    res.render("profile.ejs", {
+      dayType: type,
+      message: msg,
+    });
   } else {
     res.redirect("/");
   }
